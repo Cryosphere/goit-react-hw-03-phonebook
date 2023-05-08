@@ -17,6 +17,26 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const localContacts = localStorage.getItem('contacts');
+    const parseContacts = JSON.parse(localContacts);
+
+    if (localContacts === null) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    } else {
+      this.setState({ contacts: parseContacts });
+    };
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const newContacts = this.state.contacts;
+    const newLocalContacts = JSON.stringify(newContacts);
+    
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      localStorage.setItem('contacts', newLocalContacts);
+    };
+  };
+
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
